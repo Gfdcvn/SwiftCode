@@ -97,6 +97,7 @@ ST_PLUS = 'PLUS'
 ST_MINUS = 'MINUS'
 ST_MUL = 'MUL'
 ST_DIV = 'DIV'
+ST_POW = 'POW'
 ST_LPAREN = 'LPAREN'
 ST_RPAREN = 'RPAREN'
 ST_EOF = 'EOF'
@@ -153,6 +154,9 @@ class Lexer:
                 self.advance()
             elif self.current_char == '/':
                 tokens.append(Token(ST_DIV, pos_start=self.pos))
+                self.advance()
+            elif self.current_char == '@':
+                tokens.append(Token(ST_POW, pos_start=self.pos))
                 self.advance()
             elif self.current_char == '(':
                 tokens.append(Token(ST_LPAREN, pos_start=self.pos))
@@ -274,18 +278,12 @@ class Parser:
                 "Expected a valid operator: '+', '-', '*' or '/' "
             ))
         return res        
+######################################################
 
-    def factor(self):
+    def atom(self):
         res = ParseResult()
         tok = self.current_tok
-
-        if tok.type in (ST_PLUS, ST_MINUS):
-            res.register(self.advance())
-            factor = res.register(self.factor())
-            if res.error: return res
-            return res.success(UnaryOpNode(tok, factor))
-
-        elif tok.type in (ST_INT, ST_FLOAT):
+        if tok.type in (ST_INT, ST_FLOAT):
             res.register(self.advance())
             return res.success(NumberNode(tok))
         
@@ -304,8 +302,25 @@ class Parser:
         
         return res.failiure(InvalidSyntaxError(
             tok.pos_start, tok.pos_end,
-            "Expected an Integer or a Float"
+            "Expected an int, a float, '+', '-' or '('"
         ))
+    
+    def power(self):
+        return self.bin_op(self.atom, (ST_POW, ), self.factor)
+        
+   
+    def factor(self):
+        res = ParseResult()
+        tok = self.current_tok
+
+        if tok.type in (ST_PLUS, ST_MINUS):
+            res.register(self.advance())
+            factor = res.register(self.factor())
+            if res.error: return res
+            return res.success(UnaryOpNode(tok, factor))
+
+
+        return self.power()
 
     def term(self):
         return self.bin_op(self.factor, (ST_MUL,ST_DIV))
@@ -313,15 +328,17 @@ class Parser:
     def expr(self):
         return self.bin_op(self.term, (ST_PLUS,ST_MINUS))
     
-    def bin_op(self, func, ops):
+    def bin_op(self, func_a, ops, func_b=None):
+        if func_b == None:
+            func_b = func_a
         res = ParseResult()
-        left = res.register(func())
+        left = res.register(func_a())
         if res.error: return res
 
         while self.current_tok.type in ops:
             op_tok = self.current_tok
             res.register(self.advance())
-            right = res.register(func())
+            right = res.register(func_b())
             if res.error: return res
             left = BinOpNode(left, op_tok, right)
 
@@ -384,6 +401,10 @@ class Number:
                 )
             return Number(self.value / other.value).set_context(self.context), None
         
+    def powed_by(self, other):
+        if isinstance(other, Number):
+            return Number(self.value ** other.value).set_context(self.context), None
+        
     def __repr__(self):
         return str(self.value)
     
@@ -430,6 +451,8 @@ class Interpreter:
             result, error = left.multed_by(right)
         elif node.op_tok.type == ST_DIV:
             result, error = left.dived_by(right)
+        elif node.op_tok.type == ST_POW:
+            result, error = left.powed_by(right)
 
         if error:
             return res.failiure(error)
