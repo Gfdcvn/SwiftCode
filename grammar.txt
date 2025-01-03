@@ -13,14 +13,17 @@ factor     : (PLUS|MINUS) factor
 
 power      : call (POW factor)*
 
-call       : atom (LPAREN (expr (COMMA IDENTIFIER)*)? RPAREN)?
+call       : atom (LPAREN (expr (COMMA expr)*)? RPAREN)?
         
 atom       : INT|FLOAT|STRING|IDENTIFIER
            : LPAREN expr RPAREN
+           : list-expr
            : if-expr
            : ite-expr
            : while-expr
            : func-def
+
+list-expr  : LSQUARE (expr (COMMA IDENTIFIER)*)? RSQUARE
 
 if-expr    : KEYWORD:if expr KEYWORD:then expr
              (KEYWORD:ifnot expr KEYWORD:then expr)*
