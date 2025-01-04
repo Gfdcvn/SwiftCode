@@ -1306,7 +1306,7 @@ class Function(BaseFunction):
         interpreter = Interpreter()
         exec_ctx = self.generate_new_context()
 
-        res.register(self.check_and_populate_args(self.arg_names, args, exec_ctx))
+        res.register(self.check_and_populate_args(self.arg_name_toks, args, exec_ctx))
         if res.error: return res
 
         value = res.register(interpreter.visit(self.body_node, exec_ctx))

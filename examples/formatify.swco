@@ -1,0 +1,8 @@
+funct format(format, word) -> format + word + format
+show(format("Hey", "I like apples!")) 
+
+
+
+
+
+

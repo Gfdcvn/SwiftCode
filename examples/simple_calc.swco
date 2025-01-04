@@ -1,0 +1,10 @@
+show("Enter first number:")
+variable first = intinput()
+show("Enter second number:")
+variable second = intinput()
+
+show(first + second)
+show(first - second)
+show(first * second)
+show(first / second)
+show(first ^ second)
