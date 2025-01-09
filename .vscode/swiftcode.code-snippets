@@ -47,5 +47,37 @@
 			"$5"
 		],
 		"description": "Creates an if statement"
+	},
+	"Ifnot": {
+		"prefix": "ifnot",
+		"body": [
+			"ifnot $1 $2 $3 then $4",
+			"$5"
+		],
+		"description": "Creates an if not statement"
+	},
+	"Else": {
+		"prefix": "else",
+		"body": [
+			"else $1",
+			"$2"
+		],
+		"description": "Creates an else statement"
+	},
+	"Iterate": {
+		"prefix": "iterate",
+		"body": [
+			"iterate $1 = $2 until $3 step $4 then $5",
+			"$6"
+		],
+		"description": "Creates an iterate loop"
+	},
+	"While": {
+		"prefix": "while",
+		"body": [
+			"while $1 $2 $3 then $4",
+			"$5"
+		],
+		"description": "Creates a while loop"
 	}
 }
