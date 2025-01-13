@@ -121,6 +121,8 @@ ST_LTE = 'LTE'
 ST_GTE = 'GTE'
 ST_COMMA = 'COMMA'
 ST_ARROW = 'ARROW'
+ST_NEWLINE = 'NEWLINE'
+
 ST_EOF = 'EOF'
 
 KEYWORDS = [
@@ -136,7 +138,8 @@ KEYWORDS = [
     'until', # Loop
     'step', # Loop
     'while', # Loop
-    'funct' # Function
+    'funct', # Function
+    'finish'
 ]
 class Token:
     def __init__(self, type_, value=None, pos_start=None, pos_end=None):
@@ -178,6 +181,9 @@ class Lexer:
 
         while self.current_char != None:
             if self.current_char in ' \t':
+                self.advance()
+            elif self.current_char in ';\n':
+                tokens.append(Token(ST_NEWLINE, pos_start=self.pos))
                 self.advance()
             elif self.current_char in LETTERS:
                 tokens.append(self.make_identifier())
@@ -466,15 +472,27 @@ class ParseResult:
     def __init__(self):
         self.error = None
         self.node = None
+        self.last_registered_advance_count = 0
+        self.advance_count = 0
+        self.to_reverse_count = 0
+
 
     def register_advancment(self):
-        pass
+        self.last_registered_advance_count = 1
+        self.advance_count += 1
 
     def register(self, res):
+        self.last_registered_advance_count = res.advance_count
+        self.advance_count += res.advance_count
         if res.error: self.error = res.error
         return res.node
-
-
+    
+    def try_register(self, res):
+        if res.error:
+            self.to_reverse_count = res.advance_count
+            return None
+        return self.register(res)
+    
     def success(self, node):
         self.node = node
         return self
@@ -498,11 +516,20 @@ class Parser:
         if self.tok_idx < len(self.tokens):
             self.current_tok = self.tokens[self.tok_idx]
             return self.current_tok
+        
+    def reverse(self, amount=1):
+        self.tok_idx -= amount
+        self.update_current_tok()
+        return self.current_tok
+    
+    def update_current_tok(self):
+        if self.tok_idx >= 0 and self.tok_idx < len(self.tokens):
+            self.current_tok = self.tokens[self.tok_idx]
 
 ###################################################
 
     def parse(self):
-        res = self.expr()
+        res = self.statements()
         if not res.error and self.current_tok.type != ST_EOF: 
             return res.failiure(InvalidSyntaxError(
                 self.current_tok.pos_start, self.current_tok.pos_end,
@@ -510,6 +537,43 @@ class Parser:
             ))
         return res        
 ######################################################
+
+    def statements(self):
+        res = ParseResult()
+        statements = []
+        pos_start = self.current_tok.pos_start.copy()
+
+        while self.current_tok.type == ST_NEWLINE:
+            res.register_advancment()
+            self.advance()
+
+        statement = res.register(self.expr())
+        if res.error: return res
+        statements.append(statement)
+        
+        more_statements = True
+
+        while True:
+            newline_count = 0
+            while self.current_tok.type == ST_NEWLINE:
+                res.register_advancment()
+                self.advance()
+                newline_count += 1
+            if newline_count == 0:
+                more_statements = False
+            if not more_statements: break
+            statement = res.try_register(self.expr())
+            if not statement:
+                self.reverse(res.to_reverse_count)
+                more_statements = False
+                continue
+            statements.append(statement)
+
+        return res.success(ListNode(
+            statements,
+            pos_start,
+            self.current_tok.pos_end.copy()
+        ))
 
     def if_expr(self):
         res = ParseResult()
@@ -1166,6 +1230,8 @@ Number.null = Number(0)
 Number.false = Number(0)
 Number.true = Number(1)
 Number.math_PI = Number(math.pi)
+Number.math_inf = Number(math.inf)
+Number.math_tau = Number(math.tau)
 class String(Value):
     def __init__(self, value):
         super().__init__()
@@ -1372,7 +1438,7 @@ class BuiltInFunction(BaseFunction):
                 number = int(text)
                 break
             except ValueError:
-                print(f"'{text}' is not an integer. ")
+                print(f"ERROR: '{text}' is not an integer. Intinput accepts only integers.")
         return RTResult().success(Number(number))
     execute_intinput.arg_names = []
 
@@ -1723,6 +1789,8 @@ global_symbol_table.set("null", Number.null)
 global_symbol_table.set("true", Number.true)
 global_symbol_table.set("false", Number.false)
 global_symbol_table.set("pimat", Number(math.pi))
+global_symbol_table.set("infimat", Number(math.inf))
+global_symbol_table.set("taumat", Number(math.tau))
 global_symbol_table.set("show", BuiltInFunction.print)
 global_symbol_table.set("showret", BuiltInFunction.print_ret)
 global_symbol_table.set("usrinput", BuiltInFunction.input)

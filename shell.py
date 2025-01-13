@@ -1,10 +1,16 @@
 import swiftcode
 
-print(f'Running Swift Code Interactive Shell, Swift Code V1.0')
-# print(f"Type 'info' for info about the shell, type 'exit' to exit the shell")
+print(f'Running Swift Code Interactive Shell, Swift Code V1.1')
+print(f"Type 'clean' to clear the shell.\n\n")
+
 while True:
     text = input('SwiftCode > ')
+    if text.strip() == "": continue
     result, error = swiftcode.run('<stdin>', text)
 
     if error: print(error.as_string())
-    elif result: print(repr(result))
+    elif result: 
+        if len(result.elements) == 1:
+            print(repr(result.elements[0]))
+        else:
+            print(repr(result))

@@ -32,6 +32,23 @@
 		],
 		"description": "Returns a value/message"
 	},
+	"User Input": {
+		"prefix": "usrinput",
+		"body": [
+			"usrinput($1)",
+			"$2"
+		],
+		"description": "Gets an input from the user"
+	},
+	"Int Input": {
+		"prefix": "intinput",
+		"body": [
+			"intinput($1)",
+			"$2"
+		],
+		"description": "Gets an integer input from the user"
+	},
+
 	"Function": {
 		"prefix": "funct",
 		"body": [
