@@ -48,6 +48,14 @@
 		],
 		"description": "Gets an integer input from the user"
 	},
+	"Extend List": {
+		"prefix": "extend",
+		"body": [
+			"extend($1, $2)",
+			"$3"
+		],
+		"description": "Extend a list by another list"
+	},
 
 	"Function": {
 		"prefix": "funct",
@@ -61,7 +69,9 @@
 		"prefix": "if",
 		"body": [
 			"if $1 $2 $3 then $4",
-			"$5"
+			"$5",
+			"finish"
+
 		],
 		"description": "Creates an if statement"
 	},
