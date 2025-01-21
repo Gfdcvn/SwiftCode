@@ -592,7 +592,7 @@ class Parser:
         res = ParseResult()
         else_case = None
 
-        if self.current_tok.matches(ST_KEYWORD, 'ifnot'):
+        if self.current_tok.matches(ST_KEYWORD, 'else'):
             res.register_advancment()
             self.advance()
 
@@ -877,13 +877,13 @@ class Parser:
         if self.current_tok.type == ST_ARROW:
             res.register_advancment()
             self.advance()
-            body = res.register(self.expr())
+            node_to_return = res.register(self.expr())
             if res.error: return res
 
             return res.success(FuncDefNode(
                 var_name_tok,
                 arg_name_toks,
-                body,
+                node_to_return,
                 False
             ))
         
@@ -895,7 +895,7 @@ class Parser:
         res.register_advancment()
         self.advance()
 
-        body = res.register(self.statements())
+        node_to_return = res.register(self.statements())
         if res.error: return res
 
         if not self.current_tok.matches(ST_KEYWORD, 'finish'):
@@ -910,7 +910,7 @@ class Parser:
         return res.success(FuncDefNode(
             var_name_tok,
             arg_name_toks,
-            body,
+            node_to_return,
             True
         ))
 
