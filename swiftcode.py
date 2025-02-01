@@ -60,7 +60,7 @@ class RTError(Error):
         ctx = self.context
 
         while ctx:
-            result += f'File: {pos.fn}, Line: {str(pos.ln + 1)}, in {ctx.display_name}\n' + result
+            #result = f'File: {pos.fn}, Line: {str(pos.ln + 1)}, in {ctx.display_name}\n' + result
             pos = ctx.parent_entry_pos
             ctx = ctx.parent
 
@@ -185,6 +185,8 @@ class Lexer:
         while self.current_char != None:
             if self.current_char in ' \t':
                 self.advance()
+            elif self.current_char == '@':
+                self.skip_comment()
             elif self.current_char in ';\n':
                 tokens.append(Token(ST_NEWLINE, pos_start=self.pos))
                 self.advance()
@@ -346,6 +348,14 @@ class Lexer:
             tok_type = ST_GTE
 
         return Token(tok_type, pos_start=pos_start, pos_end=self.pos)
+    
+    def skip_comment(self):
+        self.advance()
+
+        while self.current_char != '\n':
+            self.advance()
+
+        self.advance()
 
 
 ##############################################
@@ -1734,6 +1744,53 @@ class BuiltInFunction(BaseFunction):
         return RTResult().success(Number.null)
     execute_extend.arg_names = ['listA', 'listB']
 
+    def execute_len(self, exec_ctx):
+        list_ = exec_ctx.symbol_table.get("list")
+
+        if not isinstance(list_, List):
+            return RTResult.failiure(RTError(
+                self.pos_start, self.pos_end,
+                "Argument must be a list!",
+                exec_ctx
+            ))
+        
+        return RTResult().success(Number(len(list_.elements)))
+    execute_len.arg_names = ["list"]
+
+    def execute_run(self, exec_ctx):
+        fn = exec_ctx.symbol_table.get("fn")
+
+        if not isinstance(fn, String):
+            return RTResult.failiure(RTError(
+                self.pos_start, self.pos_end,
+                "Argument must be a string!",
+                exec_ctx
+            ))
+        fn = fn.value
+
+        try:
+            with open(fn, "r") as f:
+                script = f.read()
+        except Exception as e:
+            return RTResult().failiure(RTError(
+                self.pos_start, self.pos_end,
+                f"Failed to read swiftcode file {fn}\n" + str(e),
+                exec_ctx
+            ))
+        
+        _, error = run(fn, script)
+
+        if error:
+            return RTResult().failiure(RTError(
+                self.pos_start, self.pos_end,
+                f"Failed to finish executing file {fn}\n" + 
+                error.as_string(),
+                exec_ctx
+            ))
+        
+        return RTResult().success(Number.null)
+    execute_run.arg_names = ["fn"]
+
 BuiltInFunction.print = BuiltInFunction('show')
 BuiltInFunction.print_ret = BuiltInFunction('showret')
 BuiltInFunction.input = BuiltInFunction('usrinput')
@@ -1746,6 +1803,8 @@ BuiltInFunction.is_function = BuiltInFunction('isfunct')
 BuiltInFunction.append = BuiltInFunction('add')
 BuiltInFunction.pop = BuiltInFunction('remove')
 BuiltInFunction.extend = BuiltInFunction('extend')
+BuiltInFunction.len = BuiltInFunction('len')
+BuiltInFunction.run = BuiltInFunction('run')
 
     
 ##############################################
@@ -2042,6 +2101,9 @@ global_symbol_table.set("isfunct", BuiltInFunction.is_function)
 global_symbol_table.set("add", BuiltInFunction.append)
 global_symbol_table.set("remove", BuiltInFunction.pop)
 global_symbol_table.set("extend", BuiltInFunction.extend)
+global_symbol_table.set("lenl", BuiltInFunction.len)
+global_symbol_table.set("frun", BuiltInFunction.run)
+
 
 def run(fn, text):
     # Gen Tokens

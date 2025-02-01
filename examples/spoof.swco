@@ -1,0 +1,29 @@
+funct oopify(prefix) -> prefix + "oop"
+
+funct join(elements, seperator)
+    variable result = ""
+    variable len = lenl(elements)
+
+    iterate i = 0 until len then 
+        variable result = result + elements/i
+        if i != len - 1 then variable result = result + seperator
+    finish
+
+    give result
+finish
+
+funct map(elements, func)
+    variable new_elements = []
+
+    iterate i = 0 until lenl(elements)  then 
+        new_elements + func(elements/i)
+    finish
+
+    give new_elements
+finish
+
+iterate i = 0 until 5 then 
+    show(join(map(["l", "sp"], oopify), ", "))
+finish
+
+

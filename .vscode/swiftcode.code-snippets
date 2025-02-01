@@ -63,7 +63,16 @@
 			"funct($1) -> $2",
 			"$3"
 		],
-		"description": "Creates a function"
+		"description": "Creates a single line function"
+	},
+	"Multi Line Func": {
+		"prefix": "funct",
+		"body": [
+			"funct $1($2)",
+			"",
+			"",
+			"finish"
+		]
 	},
 	"If": {
 		"prefix": "if",
