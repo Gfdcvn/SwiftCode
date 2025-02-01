@@ -1,6 +1,6 @@
 import swiftcode
 
-print(f'Running Swift Code Interactive Shell, Swift Code V1.1')
+print(f'Running Swift Code Interactive Shell, Swift Code V1.3')
 print(f"Type 'clean' to clear the shell.\n\n")
 
 while True:
