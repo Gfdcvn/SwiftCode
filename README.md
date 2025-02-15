@@ -2,10 +2,10 @@
 <h1>
   Swiftcode Programming Language
   
-  [![Stars](https://img.shields.io/github/stars/revoltchat/self-hosted?style=flat-square&logoColor=white)](https://github.com/Gfdcvn/SwiftCode/stargazers)
-  [![Forks](https://img.shields.io/github/forks/revoltchat/self-hosted?style=flat-square&logoColor=white)](https://github.com/Gfdcvn/SwiftCode/network/members)
-  [![Pull Requests](https://img.shields.io/github/issues-pr/revoltchat/self-hosted?style=flat-square&logoColor=white)](https://github.com/Gfdcvn/SwiftCode/pulls)
-  [![Issues](https://img.shields.io/github/issues/revoltchat/self-hosted?style=flat-square&logoColor=white)](https://github.com/Gfdcvn/SwiftCode/issues)
-  [![Contributors](https://img.shields.io/github/contributors/revoltchat/self-hosted?style=flat-square&logoColor=white)](https://github.com/Gfdcvn/SwiftCode/graphs/contributors)
-  [![License](https://img.shields.io/github/license/revoltchat/self-hosted?style=flat-square&logoColor=white)](https://github.com/Gfdcvn/SwiftCode/blob/main/LICENSE)
+  [![Stars](https://img.shields.io/github/stars/Gfdcvn/SwiftCode?style=flat-square&logoColor=white)](https://github.com/Gfdcvn/SwiftCode/stargazers)
+  [![Forks](https://img.shields.io/github/forks/Gfdcvn/SwiftCode?style=flat-square&logoColor=white)](https://github.com/Gfdcvn/SwiftCode/network/members)
+  [![Pull Requests](https://img.shields.io/github/issues-pr/Gfdcvn/SwiftCode?style=flat-square&logoColor=white)](https://github.com/Gfdcvn/SwiftCode/pulls)
+  [![Issues](https://img.shields.io/github/issues/Gfdcvn/SwiftCode?style=flat-square&logoColor=white)](https://github.com/Gfdcvn/SwiftCode/issues)
+  [![Contributors](https://img.shields.io/github/contributors/Gfdcvn/SwiftCode?style=flat-square&logoColor=white)](https://github.com/Gfdcvn/SwiftCode/graphs/contributors)
+  [![License](https://img.shields.io/github/license/Gfdcvn/SwiftCode?style=flat-square&logoColor=white)](https://github.com/Gfdcvn/SwiftCode/blob/main/LICENSE)
 </h1>
