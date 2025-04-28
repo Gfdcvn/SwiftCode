@@ -9,3 +9,6 @@
   [![Contributors](https://img.shields.io/github/contributors/Gfdcvn/SwiftCode?style=flat-square&logoColor=white)](https://github.com/Gfdcvn/SwiftCode/graphs/contributors)
   [![License](https://img.shields.io/github/license/Gfdcvn/SwiftCode?style=flat-square&logoColor=white)](https://github.com/Gfdcvn/SwiftCode/blob/main/LICENSE)
 </h1>
+
+### Deploying as a docker container
+Run docker run -it e403ab292d23 
