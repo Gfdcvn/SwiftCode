@@ -11,4 +11,11 @@
 </h1>
 
 ### Deploying as a docker container
-Run docker run -it e403ab292d23 
+Run `docker run -it e403ab292d23`
+Or `sudo docker run -it e403ab292d23`
+
+### Running Locally
+
+1. Download this project as ZIP or using git clone.
+2. Run `python swiftcode.py` in terminal to check for errors. If the terminal returns nothing, continue to next step.
+3. Now you can run `python shell.py` and start using swiftcode!
