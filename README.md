@@ -10,6 +10,10 @@
   [![License](https://img.shields.io/github/license/Gfdcvn/SwiftCode?style=flat-square&logoColor=white)](https://github.com/Gfdcvn/SwiftCode/blob/main/LICENSE)
 </h1>
 
+# Relevant Links
+
+# Running Swiftcode
+
 ### Deploying as a docker container
 Run `docker run -it e403ab292d23`
 Or `sudo docker run -it e403ab292d23`
@@ -19,3 +23,7 @@ Or `sudo docker run -it e403ab292d23`
 1. Download this project as ZIP or using git clone.
 2. Run `python swiftcode.py` in terminal to check for errors. If the terminal returns nothing, continue to next step.
 3. Now you can run `python shell.py` and start using swiftcode!
+
+# Quick Reference Guide
+
+# Known Issues
