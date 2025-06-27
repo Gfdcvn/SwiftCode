@@ -1636,11 +1636,10 @@ class BuiltInFunction(BaseFunction):
     execute_show.arg_names = ['value']
 
     def execute_termp(self, exec_ctx):
-        print("Termination Point", exec_ctx.symbol_table.get('value'), " reached!")
-        print("     EXITING...  ")
+        print("Termination Point ", exec_ctx.symbol_table.get('value'), " reached!")
+        print("     EXITING PROGRAM ...  ")
         sys.exit()
         return RTResult().success(Number.null)
-        
     execute_termp.arg_names = ['value']
 
     def execute_showwar(self, exec_ctx):

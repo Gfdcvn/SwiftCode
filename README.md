@@ -27,3 +27,7 @@ Or `sudo docker run -it e403ab292d23`
 # Quick Reference Guide
 
 # Known Issues
+
+# Changelog
+
+1. 27.06.25 - Added the 'termp' command
