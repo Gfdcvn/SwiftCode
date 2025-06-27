@@ -6,6 +6,7 @@ from string_with_arrows import string_with_arrows
 import string
 import os
 import math
+import sys
 
 ##############################################
 #            CONSTANTS
@@ -1634,6 +1635,14 @@ class BuiltInFunction(BaseFunction):
         return RTResult().success(Number.null)
     execute_show.arg_names = ['value']
 
+    def execute_termp(self, exec_ctx):
+        print("Termination Point", exec_ctx.symbol_table.get('value'), " reached!")
+        print("     EXITING...  ")
+        sys.exit()
+        return RTResult().success(Number.null)
+        
+    execute_termp.arg_names = ['value']
+
     def execute_showwar(self, exec_ctx):
         print("⚠️   WARNING   ⚠️")
         print(str(exec_ctx.symbol_table.get('value')))
@@ -1821,7 +1830,7 @@ BuiltInFunction.pop = BuiltInFunction('remove')
 BuiltInFunction.extend = BuiltInFunction('extend')
 BuiltInFunction.len = BuiltInFunction('len')
 BuiltInFunction.run = BuiltInFunction('run')
-BuiltInFunction.run = BuiltInFunction('run')
+BuiltInFunction.termp = BuiltInFunction('termp')
     
 ##############################################
 #               CONTEXT
@@ -2121,7 +2130,7 @@ global_symbol_table.set("remove", BuiltInFunction.pop)
 global_symbol_table.set("extend", BuiltInFunction.extend)
 global_symbol_table.set("lenl", BuiltInFunction.len)
 global_symbol_table.set("frun", BuiltInFunction.run)
-
+global_symbol_table.set("termp", BuiltInFunction.termp)
 
 def run(fn, text):
     # Gen Tokens
