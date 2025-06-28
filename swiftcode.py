@@ -7,6 +7,8 @@ import string
 import os
 import math
 import sys
+from termcolor import colored
+from colorama import init
 
 ##############################################
 #            CONSTANTS
@@ -1635,6 +1637,8 @@ class BuiltInFunction(BaseFunction):
         return RTResult().success(Number.null)
     execute_show.arg_names = ['value']
 
+
+
     def execute_termp(self, exec_ctx):
         print("Termination Point ", exec_ctx.symbol_table.get('value'), " reached!")
         print("     EXITING PROGRAM ...  ")
@@ -1814,6 +1818,7 @@ class BuiltInFunction(BaseFunction):
     execute_run.arg_names = ["fn"]
 
 BuiltInFunction.print = BuiltInFunction('show')
+BuiltInFunction.printco = BuiltInFunction('showco')
 BuiltInFunction.printwar = BuiltInFunction('showwar')
 BuiltInFunction.printerr = BuiltInFunction('showerr')
 BuiltInFunction.print_ret = BuiltInFunction('showret')
@@ -2114,6 +2119,7 @@ global_symbol_table.set("pimat", Number(math.pi))
 global_symbol_table.set("infimat", Number(math.inf))
 global_symbol_table.set("taumat", Number(math.tau))
 global_symbol_table.set("show", BuiltInFunction.print)
+global_symbol_table.set("showco", BuiltInFunction.printco)
 global_symbol_table.set("showret", BuiltInFunction.print_ret)
 global_symbol_table.set("usrinput", BuiltInFunction.input)
 global_symbol_table.set("intinput", BuiltInFunction.input_int)

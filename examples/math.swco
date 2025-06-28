@@ -10,8 +10,3 @@ funct mod(number, base)
     give number
 finish
 show(mod(123, 10))
-
-
-
-
-show(new_num)
