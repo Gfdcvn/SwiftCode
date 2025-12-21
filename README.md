@@ -25,10 +25,37 @@ Or `sudo docker run -it e403ab292d23`
 3. Now you can run `python shell.py` and start using swiftcode!
 
 # Quick Reference Guide
+**Multi Line Statements Must End With "finish"**
 
+##### Comparisons & Logic
+- `==` - Integer Comparison
+- `=`` - String Comparison
+- `>=` - Greater Or Equal
+- `<=` - Less Or Equal
+- `!=` - Not Equal
+- `>` - Greater Than
+- `<` - Less Than
+
+#### Operations
+- `+` - Plus
+- `-` - Minus
+- `*` - Multiply
+- `/` - Divide
+- `^` - Power of
+- `()` - Brackets
+
+#### Core Functions
+- `if` - If something is equal to something
+- `ifnot` - If something is not equal to something check(elif)
+- `else` - If something is not equal to something
+- `show` - Print value to terminal
+- `give` - Return value to program
+- `variable` - Variable decleration
+- `usrinput` - Ask user for input
+- `termp(str)` - Termination point with custom output
 # Known Issues
 
 # Changelog
 
-- 27.06.25 - Added the 'termp' command.
+- 27.06.25 - Added the 'termp', 'showwar' and 'showerr' commands.
 - 21.12.25 - Added coloring to error arrows, added coloring to errors, added string comparisons(=`).

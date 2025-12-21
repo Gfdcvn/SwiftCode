@@ -7,8 +7,7 @@ import string
 import os
 import math
 import sys
-from termcolor import colored
-from colorama import init
+
 
 ##############################################
 #            CONSTANTS
