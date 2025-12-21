@@ -53,7 +53,7 @@ class RTError(Error):
 
     def as_string(self):
         result = self.generate_traceback()
-        result += f'ERROR: {self.error_name}: {self.details}\n'
+        result += f'\033[31mERROR:\033[0m {self.error_name}: {self.details}\n'
         result += '\n\n' + string_with_arrows(self.pos_start.ftxt, self.pos_start, self.pos_end)
         return result
 
@@ -63,7 +63,7 @@ class RTError(Error):
         ctx = self.context
 
         while ctx:
-            result = f'File: {self.pos_start.fn}, Line: {str(self.pos_end.ln + 1)}, in {ctx.display_name}\n' + result
+            result = f'\033[35mFile:\033[0m {self.pos_start.fn}, \033[35mLine:\033[0m {str(self.pos_end.ln + 1)}, \033[35min\033[0m {ctx.display_name}\n' + result
             pos = ctx.parent_entry_pos
             ctx = ctx.parent
 
@@ -125,7 +125,7 @@ ST_GTE = 'GTE'
 ST_COMMA = 'COMMA'
 ST_ARROW = 'ARROW'
 ST_NEWLINE = 'NEWLINE'
-
+ST_SEQ = 'SEQ'
 ST_EOF = 'EOF'
 
 KEYWORDS = [
@@ -322,15 +322,19 @@ class Lexer:
         return None, ExpectedCharError(pos_start, self.pos, "'=' after '!'")
     
     def make_equals(self):
-        tok_type = ST_EQ
         pos_start = self.pos.copy()
         self.advance()
 
         if self.current_char == '=':
             self.advance()
-            tok_type = ST_EE
+            return Token(ST_EE, pos_start=pos_start, pos_end=self.pos)
 
-        return Token(tok_type, pos_start=pos_start, pos_end=self.pos)
+        if self.current_char == '`':
+            self.advance()
+            return Token(ST_SEQ, pos_start=pos_start, pos_end=self.pos)
+
+        return Token(ST_EQ, pos_start=pos_start, pos_end=self.pos)
+
     def make_less_than(self):
         tok_type = ST_LT
         pos_start = self.pos.copy()
@@ -1120,7 +1124,7 @@ class Parser:
             node = res.register(self.comp_expr())
             if res.error: return res
             return res.success(UnaryOpNode(op_tok, node))
-        node = res.register(self.bin_op(self.arith_expr, ((ST_EE, ST_NE, ST_LT, ST_GT, ST_LTE, ST_GTE))))
+        node = res.register(self.bin_op(self.arith_expr,((ST_EE, ST_NE, ST_LT, ST_GT, ST_LTE, ST_GTE, ST_SEQ))))
 
         if res.error:
             return res.failiure(InvalidSyntaxError(
@@ -1460,6 +1464,11 @@ class String(Value):
         else:
             return None, Value.IllgalOperation(self.other)
         
+    def get_string_eq(self, other):
+        if isinstance(other, String):
+            return Number(int(self.value == other.value)).set_context(self.context), None
+        return None, self.IllgalOperation(other)
+
     def is_true(self):
         return len(self.value) > 0
     
@@ -1959,6 +1968,11 @@ class Interpreter:
             result, error = left.anded_by(right)
         elif node.op_tok.matches(ST_KEYWORD, 'or'):
             result, error = left.ored_by(right)
+        elif node.op_tok.type == ST_SEQ:
+            if isinstance(left, String):
+                result, error = left.get_string_eq(right)
+            else:
+                return res.failiure(RTError(node.pos_start, node.pos_end,"=` can only be used for string comparison",context))
 
         if error:
             return res.failiure(error)

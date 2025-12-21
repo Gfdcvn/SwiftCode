@@ -30,4 +30,5 @@ Or `sudo docker run -it e403ab292d23`
 
 # Changelog
 
-1. 27.06.25 - Added the 'termp' command
+- 27.06.25 - Added the 'termp' command.
+- 21.12.25 - Added coloring to error arrows, added coloring to errors, added string comparisons(=`).
