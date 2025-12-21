@@ -1,0 +1,119 @@
+{
+	// Place your SwiftCode workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
+	// Placeholders with the same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"scope": "javascript,typescript",
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+
+	"Show output": {
+		"prefix": "show",
+		"body": [
+			"show($1)",
+			"$2"
+		],
+		"description": "Prints a value/message to the shell"
+	},
+	"Show Return": {
+		"prefix": "showret",
+		"body": [
+			"showret($1)",
+			"$2"
+		],
+		"description": "Returns a value/message"
+	},
+	"User Input": {
+		"prefix": "usrinput",
+		"body": [
+			"usrinput($1)",
+			"$2"
+		],
+		"description": "Gets an input from the user"
+	},
+	"Int Input": {
+		"prefix": "intinput",
+		"body": [
+			"intinput($1)",
+			"$2"
+		],
+		"description": "Gets an integer input from the user"
+	},
+	"Extend List": {
+		"prefix": "extend",
+		"body": [
+			"extend($1, $2)",
+			"$3"
+		],
+		"description": "Extend a list by another list"
+	},
+
+	"Function": {
+		"prefix": "funct",
+		"body": [
+			"funct($1) -> $2",
+			"$3"
+		],
+		"description": "Creates a single line function"
+	},
+	"Multi Line Func": {
+		"prefix": "funct",
+		"body": [
+			"funct $1($2)",
+			"",
+			"",
+			"finish"
+		]
+	},
+	"If": {
+		"prefix": "if",
+		"body": [
+			"if $1 $2 $3 then $4",
+			"$5",
+			"finish"
+
+		],
+		"description": "Creates an if statement"
+	},
+	"Ifnot": {
+		"prefix": "ifnot",
+		"body": [
+			"ifnot $1 $2 $3 then $4",
+			"$5"
+		],
+		"description": "Creates an if not statement"
+	},
+	"Else": {
+		"prefix": "else",
+		"body": [
+			"else $1",
+			"$2"
+		],
+		"description": "Creates an else statement"
+	},
+	"Iterate": {
+		"prefix": "iterate",
+		"body": [
+			"iterate $1 = $2 until $3 step $4 then $5",
+			"$6"
+		],
+		"description": "Creates an iterate loop"
+	},
+	"While": {
+		"prefix": "while",
+		"body": [
+			"while $1 $2 $3 then $4",
+			"$5"
+		],
+		"description": "Creates a while loop"
+	}
+}
