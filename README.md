@@ -57,5 +57,6 @@ Or `sudo docker run -it e403ab292d23`
 
 # Changelog
 
-- 27.06.25 - Added the 'termp', 'showwar' and 'showerr' commands.
+- 23.12.25 - Added time commands: sleep({time}, {unit}), date(), date_time(), weekday(), weekday_str()
 - 21.12.25 - Added coloring to error arrows, added coloring to errors, added string comparisons(=`).
+- 27.06.25 - Added the 'termp', 'showwar' and 'showerr' commands.

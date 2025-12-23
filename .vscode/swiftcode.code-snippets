@@ -115,5 +115,26 @@
 			"$5"
 		],
 		"description": "Creates a while loop"
+	},
+		"Termp": {
+		"prefix": "termp",
+		"body": [
+			"termp($1)",
+		],
+		"description": "Termination point with custom text"
+	},
+			"Showerr": {
+		"prefix": "showerr",
+		"body": [
+			"showerr($1)",
+		],
+		"description": "Shows user called error"
+	},
+			"Variable": {
+		"prefix": "vari",
+		"body": [
+			"variable $1 = $3",
+		],
+		"description": "Initialize a new variable"
 	}
 }

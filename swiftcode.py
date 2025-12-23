@@ -2,6 +2,8 @@
 #            IMPORTS
 ##############################################
 
+import datetime
+import time
 from string_with_arrows import string_with_arrows
 import string
 import os
@@ -30,7 +32,7 @@ class Error:
         self.details = details
 
     def as_string(self):
-        result = f'ERROR: {self.error_name}: {self.details}\n'
+        result = f'\033[31mERROR:\033[0m {self.error_name}: {self.details}\n'
         result += f'File: {self.pos_start.fn}, Line: {self.pos_start.ln + 1}'
         result += '\n\n' + string_with_arrows(self.pos_start.ftxt, self.pos_start, self.pos_end)
         return result
@@ -1660,6 +1662,34 @@ class BuiltInFunction(BaseFunction):
         print("⚠️   WARNING   ⚠️")
         return RTResult().success(Number.null)
     execute_showwar.arg_names = ['value']
+
+    def execute_sleep(self, exec_ctx):
+        res = RTResult()
+        value = exec_ctx.symbol_table.get("value")
+        unit = exec_ctx.symbol_table.get("unit")
+        if not isinstance(value, Number):
+            return res.failiure(RTError(self.pos_start, self.pos_end,"sleep() first argument must be a number",exec_ctx))
+        if not isinstance(unit, Number):
+            return res.failiure(RTError(self.pos_start, self.pos_end,"sleep() second argument must be a time unit(s,ms,m)",exec_ctx ))
+        time.sleep(value.value * unit.value)
+        return res.success(Number.null)
+    execute_sleep.arg_names = ["value", "unit"]
+
+    def execute_date(self, exec_ctx):
+        return RTResult().success(String(datetime.date.today().isoformat()))
+    execute_date.arg_names = []
+
+    def execute_date_time(self, exec_ctx):
+        return RTResult().success(String(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
+    execute_date_time.arg_names = []
+
+    def execute_weekday(self, exec_ctx):
+        return RTResult().success(Number(datetime.datetime.now().weekday()))
+    execute_weekday.arg_names = []
+
+    def execute_weekday_str(self, exec_ctx):
+        return RTResult().success(String(datetime.datetime.now().strftime("%A")))
+    execute_weekday_str.arg_names = []
     
     def execute_showerr(self, exec_ctx):
         print("❌   ERROR   ❌")
@@ -2149,6 +2179,14 @@ global_symbol_table.set("extend", BuiltInFunction.extend)
 global_symbol_table.set("lenl", BuiltInFunction.len)
 global_symbol_table.set("frun", BuiltInFunction.run)
 global_symbol_table.set("termp", BuiltInFunction.termp)
+global_symbol_table.set("s", Number(1))
+global_symbol_table.set("m", Number(60))
+global_symbol_table.set("ms", Number(0.001))
+global_symbol_table.set("sleep", BuiltInFunction("sleep"))
+global_symbol_table.set("date", BuiltInFunction("date"))
+global_symbol_table.set("date_time", BuiltInFunction("date_time"))
+global_symbol_table.set("weekday", BuiltInFunction("weekday"))
+global_symbol_table.set("weekday_str", BuiltInFunction("weekday_str"))
 
 def run(fn, text):
     # Gen Tokens
