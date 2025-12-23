@@ -1,0 +1,59 @@
+statements : NEWLINE* statement (NEWLINE+ statement)* NEWLINE*   
+
+statement  :  KEYWORD:give expr?
+           : KEYWORD:continue 
+           : KEYWORD:destroy
+           : expr
+
+expr       : KEYWORD:variable IDENTIFIER EQ expr
+           : comp-expr ((KEYWORD:and|or)comp-expr)
+
+comp-expr  : NOT comp-expr
+           : arith-expr ((EE|LT|GT|LTE|GTE)arith-expr)*
+
+arith-expr : term ((PLUS|MINUS) term)*
+
+term       : factor ((MUL|DIV) factor)*
+
+factor     : (PLUS|MINUS) factor
+           : power
+
+power      : call (POW factor)*
+
+call       : atom (LPAREN (expr (COMMA expr)*)? RPAREN)?
+        
+atom       : INT|FLOAT|STRING|IDENTIFIER
+           : LPAREN expr RPAREN
+           : list-expr
+           : if-expr
+           : ite-expr
+           : while-expr
+           : func-def
+
+list-expr  : LSQUARE (expr (COMMA IDENTIFIER)*)? RSQUARE
+
+if-expr    : KEYWORD:if expr KEYWORD:then
+             (statement if-expr-b|if-expr-c?)
+           | (NEWLINE statements KEYWORD:finish|if-expr-b|if-expr-c)
+
+if-expr-b  : KEYWORD:ifnot expr KEYWORD:then
+             (statement if-expr-b|if-expr-c?)
+           | (NEWLINE statements KEYWORD:finish|if-expr-b|if-expr-c)
+
+if-expr-c  : KEYWORD:else
+             statement
+           | (NEWLINE statements KEYWORD:finish)
+
+ite-expr   : KEYWORD:iterate IDENTIFIER EQ expr KEYWORD:until expr
+             (KEYWORD:step expr)? KEYWORD:then 
+             statement
+           | (NEWLINE statements KEYWORD:finish)
+
+while-expr : KEYWORD:while expr KEYWORD:then 
+             statement
+           | (NEWLINE statements KEYWORD:finish)
+
+func-def   : KEYWORD:funct IDENTIFIER?
+             LPAREN (IDENTIFIER (COMMA IDENTIFIER)*)? RPAREN
+             (ARROW expr)
+           | (NEWLINE statements KEYWORD:finish)

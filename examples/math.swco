@@ -1,0 +1,12 @@
+funct mod(number, base)
+    while number >= base then
+        variable number = number - base
+    finish
+    
+    while number < 0 then
+        variable number = number + base
+    finish
+    
+    give number
+finish
+show(mod(123, 10))

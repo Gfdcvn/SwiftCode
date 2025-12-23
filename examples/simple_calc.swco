@@ -1,0 +1,18 @@
+@ Simple Calculator
+
+
+show("Enter first number:")
+variable first = intinput()
+show("Enter second number:")
+variable second = intinput()
+
+show("Addition:")
+show(first + second)
+show("Subtraction:")
+show(first - second)
+show("Multiplication:")
+show(first * second)
+show("Division:")
+show(first / second)
+show("Power:")
+show(first ^ second)
