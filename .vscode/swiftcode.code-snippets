@@ -158,4 +158,11 @@
 		],
 		"description": "Shows current weekday(string)"
 	},
+		"Load Env File": {
+		"prefix": "loadenv",
+		"body": [
+			"loadenv()$1",
+		],
+		"description": "loads a .env file and prepares project to use it"
+	}
 }

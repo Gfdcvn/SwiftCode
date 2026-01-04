@@ -1,6 +1,9 @@
+loadenv()
+show("Bear:" + findenv("BEAR"))
+
+
 variable a = 55
 iterate i = 1 until 5 step 1 then
     sleep(1, s)
     show(date_time())
 finish
-showerr()

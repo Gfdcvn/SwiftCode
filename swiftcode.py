@@ -9,8 +9,7 @@ import string
 import os
 import math
 import sys
-
-
+from dotenv import load_dotenv
 ##############################################
 #            CONSTANTS
 ##############################################
@@ -1698,6 +1697,19 @@ class BuiltInFunction(BaseFunction):
         return RTResult().success(Number.null)
     execute_showerr.arg_names = ['value']
 
+    def execute_loadenv(self, exec_ctx):
+        load_dotenv()
+        return RTResult().success(Number(1))
+    execute_loadenv.arg_names = []
+
+    def execute_findenv(self, exec_ctx):
+        key = exec_ctx.symbol_table.get("key")
+        value = os.getenv(key.value)
+        if value is None:
+            return RTResult().success()
+        return RTResult().success(String(value))
+    execute_findenv.arg_names = ["key"]
+
     def execute_showret(self, exec_ctx):
         return RTResult().success(String(exec_ctx.symbol_table.get('value')))
     execute_showret.arg_names = ['value']
@@ -1808,6 +1820,38 @@ class BuiltInFunction(BaseFunction):
         return RTResult().success(Number.null)
     execute_extend.arg_names = ['listA', 'listB']
 
+    def execute_filefound(self, exec_ctx):
+        path = exec_ctx.symbol_table.get("path").value
+        return RTResult().success(Number(int(os.path.exists(path))))
+    execute_filefound.arg_names = ["path"]
+
+    def execute_readfile(self, exec_ctx):
+        path = exec_ctx.symbol_table.get("path").value
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                return RTResult().success(String(f.read()))
+        except Exception as e:
+            return RTResult().failure(RTError(self.pos_start, self.pos_end,str("Could not read file. Check if file exists.", e),exec_ctx))
+    execute_readfile.arg_names = ["path"]
+
+    def execute_writefile(self, exec_ctx):
+        path = exec_ctx.symbol_table.get("path").value
+        text = exec_ctx.symbol_table.get("text").value
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(text)
+        return RTResult().success(Number(1))
+
+    execute_writefile.arg_names = ["path", "text"]
+
+    def execute_appendfile(self, exec_ctx):
+        path = exec_ctx.symbol_table.get("path").value
+        text = exec_ctx.symbol_table.get("text").value
+        with open(path, "a", encoding="utf-8") as f:
+            f.write(text)
+        return RTResult().success(Number(1))
+    execute_appendfile.arg_names = ["path", "text"]
+
+
     def execute_len(self, exec_ctx):
         list_ = exec_ctx.symbol_table.get("list")
 
@@ -1873,7 +1917,12 @@ BuiltInFunction.extend = BuiltInFunction('extend')
 BuiltInFunction.len = BuiltInFunction('len')
 BuiltInFunction.run = BuiltInFunction('run')
 BuiltInFunction.termp = BuiltInFunction('termp')
-    
+BuiltInFunction.loadenv = BuiltInFunction('loadenv')
+BuiltInFunction.findenv = BuiltInFunction('findenv')
+BuiltInFunction.appendfile = BuiltInFunction('appendfile')
+BuiltInFunction.filefound = BuiltInFunction('filefound')
+BuiltInFunction.readfile = BuiltInFunction('readfile')
+BuiltInFunction.writefile = BuiltInFunction('writefile')
 ##############################################
 #               CONTEXT
 ##############################################
@@ -2187,6 +2236,13 @@ global_symbol_table.set("date", BuiltInFunction("date"))
 global_symbol_table.set("date_time", BuiltInFunction("date_time"))
 global_symbol_table.set("weekday", BuiltInFunction("weekday"))
 global_symbol_table.set("weekday_str", BuiltInFunction("weekday_str"))
+global_symbol_table.set("loadenv", BuiltInFunction("loadenv"))
+global_symbol_table.set("findenv", BuiltInFunction("findenv"))
+global_symbol_table.set("readfile", BuiltInFunction("readfile"))
+global_symbol_table.set("writefile", BuiltInFunction("writefile"))
+global_symbol_table.set("appendfile", BuiltInFunction("appendfile"))
+global_symbol_table.set("filefound", BuiltInFunction("filefound"))
+
 
 def run(fn, text):
     # Gen Tokens
